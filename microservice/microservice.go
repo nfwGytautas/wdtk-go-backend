@@ -1,32 +1,27 @@
 package microservice
 
-import "errors"
-
-const (
-	COMM_TYPE_HTTP int = 0
-)
+/*
+ * Description of the service
+ */
+type ServiceDescription struct {
+	// The service context
+	ServiceContext interface{}
+}
 
 /*
  * The returned object from RegisterService method, this is basically the WDTK controller for a service
  */
-type WDTKService struct {
-	CommunicationType int
-	impl              interface{}
+type wdtkService struct {
+	endpoints []ServiceEndpoint
+	desc      ServiceDescription
 }
 
 // Register any interface type as service
-func RegisterService(implementation interface{}) (*WDTKService, error) {
-	service := WDTKService{}
+func RegisterService(description ServiceDescription, endpoints []ServiceEndpoint) error {
+	service := wdtkService{}
 
-	if implementation == nil {
-		return nil, errors.New("implementation cannot be nil")
-	}
-	service.impl = implementation
+	service.desc = description
+	service.endpoints = endpoints
 
-	return &service, nil
-}
-
-// Run the service
-func (service *WDTKService) Run() error {
-	return nil
+	return service.runHTTP()
 }

@@ -28,7 +28,7 @@ func (service *wdtkService) createEndpointHandler(sp *ServiceEndpoint) gin.Handl
 		}
 
 		executor := EndpointExecutor{
-			ServiceContext:  service.desc.ServiceContext,
+			ServiceContext:  service.context,
 			EndpointContext: sp.EndpointContext,
 			Body:            body,
 			Params:          map[string]string{},

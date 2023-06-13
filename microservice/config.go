@@ -5,18 +5,14 @@ import (
 	"os"
 )
 
-// The config for a service
-type ServiceConfig struct {
-	Gateway string `json:"Gateway"`
-}
-
 // Reads ServiceConfig.json from the microservice directory
-func (service *wdtkService) readConfig(config *interface{}) error {
+func (service *wdtkService) readConfig() (map[string]interface{}, error) {
 	configContent, err := os.ReadFile("ServiceConfig.json")
 	if err != nil {
-		return err
+		return nil, err
 	}
 
+	var config map[string]interface{}
 	err = json.Unmarshal(configContent, &config)
-	return err
+	return config, err
 }

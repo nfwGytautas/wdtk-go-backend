@@ -1,20 +1,17 @@
 package microservice
 
 // Setup function type, first argument is the service context, the second argument is the config
-type SetupFn func(*interface{}, interface{}) error
+type SetupFn[Context any] func(*Context, map[string]interface{}) error
 
 /*
  * Description of the service
  */
-type ServiceDescription struct {
-	// The service context
-	ServiceContext interface{}
+type ServiceDescription[Context any] struct {
+	// The service context instance
+	ServiceContext Context
 
 	// The callback for setup if needed
-	SetupFn SetupFn
-
-	// The config structure, must inherit ServiceConfig struct
-	Config interface{}
+	SetupFn SetupFn[Context]
 }
 
 /*
@@ -22,24 +19,24 @@ type ServiceDescription struct {
  */
 type wdtkService struct {
 	endpoints []ServiceEndpoint
-	context   interface{}
+	context   any
 }
 
 // Register any interface type as service
-func RegisterService(description ServiceDescription, endpoints []ServiceEndpoint) error {
+func RegisterService[Context any](description ServiceDescription[Context], endpoints []ServiceEndpoint) error {
 	service := wdtkService{}
 
 	service.context = description.ServiceContext
 	service.endpoints = endpoints
 
 	// Read config
-	err := service.readConfig(&description.Config)
+	config, err := service.readConfig()
 	if err != nil {
 		return err
 	}
 
 	if description.SetupFn != nil {
-		err := description.SetupFn(&service.context, description.Config)
+		err := description.SetupFn(service.context.(*Context), config)
 		if err != nil {
 			return err
 		}

@@ -16,7 +16,7 @@ func (service *wdtkService) runHTTP() error {
 		gs.Handle(endpoint.Type, endpoint.Name, service.createEndpointHandler(&endpoint))
 	}
 
-	return r.Run(":8080")
+	return r.Run(service.config[CONFIG_RUN_ADDRESS].(string))
 }
 
 func (service *wdtkService) createEndpointHandler(sp *ServiceEndpoint) gin.HandlerFunc {

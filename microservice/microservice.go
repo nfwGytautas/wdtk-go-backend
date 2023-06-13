@@ -17,6 +17,7 @@ type ServiceDescription[Context any] struct {
 type wdtkService struct {
 	endpoints []ServiceEndpoint
 	context   any
+	config    map[string]interface{}
 }
 
 // Register any interface type as service
@@ -40,5 +41,6 @@ func RegisterService[Context any](description ServiceDescription[Context], endpo
 		}
 	}
 
+	service.config = config
 	return service.runHTTP()
 }

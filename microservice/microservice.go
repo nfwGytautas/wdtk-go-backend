@@ -7,9 +7,6 @@ type SetupFn[Context any] func(*Context, map[string]interface{}) error
  * Description of the service
  */
 type ServiceDescription[Context any] struct {
-	// The service context instance
-	ServiceContext Context
-
 	// The callback for setup if needed
 	SetupFn SetupFn[Context]
 }
@@ -19,14 +16,14 @@ type ServiceDescription[Context any] struct {
  */
 type wdtkService struct {
 	endpoints []ServiceEndpoint
-	context   any
+	context   interface{}
 }
 
 // Register any interface type as service
-func RegisterService[Context any](description ServiceDescription[Context], endpoints []ServiceEndpoint) error {
+func RegisterService[Context struct{}](description ServiceDescription[Context], endpoints []ServiceEndpoint) error {
 	service := wdtkService{}
 
-	service.context = description.ServiceContext
+	service.context = &Context{}
 	service.endpoints = endpoints
 
 	// Read config

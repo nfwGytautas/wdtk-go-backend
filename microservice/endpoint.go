@@ -3,7 +3,7 @@ package microservice
 // Endpoint type enum
 const (
 	ENDPOINT_TYPE_GET    = "GET"
-	ENDPOINT_TYPE_ADD    = "POST"
+	ENDPOINT_TYPE_POST   = "POST"
 	ENDPOINT_TYPE_EDIT   = "PUT"
 	ENDPOINT_TYPE_DELETE = "DELETE"
 )

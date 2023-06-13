@@ -16,14 +16,15 @@ type ServiceDescription[Context any] struct {
  */
 type wdtkService struct {
 	endpoints []ServiceEndpoint
-	context   interface{}
+	context   any
 }
 
 // Register any interface type as service
-func RegisterService[Context struct{}](description ServiceDescription[Context], endpoints []ServiceEndpoint) error {
+func RegisterService[Context any](description ServiceDescription[Context], endpoints []ServiceEndpoint) error {
 	service := wdtkService{}
 
-	service.context = &Context{}
+	var context Context
+	service.context = &context
 	service.endpoints = endpoints
 
 	// Read config

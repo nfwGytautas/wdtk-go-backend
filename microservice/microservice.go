@@ -1,7 +1,7 @@
 package microservice
 
 // Setup function type, first argument is the service context, the second argument is the config
-type SetupFn func(interface{}, interface{}) error
+type SetupFn func(*interface{}, interface{}) error
 
 /*
  * Description of the service
@@ -39,7 +39,7 @@ func RegisterService(description ServiceDescription, endpoints []ServiceEndpoint
 	}
 
 	if description.SetupFn != nil {
-		err := description.SetupFn(service.context, description.Config)
+		err := description.SetupFn(&service.context, description.Config)
 		if err != nil {
 			return err
 		}

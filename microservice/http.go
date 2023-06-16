@@ -31,14 +31,14 @@ func (service *wdtkService) runHTTP() error {
 			handlers = append(handlers, jwt.AuthenticationMiddleware())
 		}
 
-		handlers = append(handlers, service.createEndpointHandler(&endpoint))
+		handlers = append(handlers, service.createEndpointHandler(endpoint))
 		gs.Handle(endpoint.Type, endpoint.Name, handlers...)
 	}
 
 	return r.Run(service.config[CONFIG_RUN_ADDRESS].(string))
 }
 
-func (service *wdtkService) createEndpointHandler(sp *ServiceEndpoint) gin.HandlerFunc {
+func (service *wdtkService) createEndpointHandler(sp ServiceEndpoint) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		body, err := io.ReadAll(c.Request.Body)
 		if err != nil {
@@ -63,7 +63,8 @@ func (service *wdtkService) createEndpointHandler(sp *ServiceEndpoint) gin.Handl
 				c.Abort()
 				return
 			} else {
-				executor.RequesterInfo = tokenInfo.(*jwt.TokenInfo)
+				tokenValue := tokenInfo.(jwt.TokenInfo)
+				executor.RequesterInfo = &tokenValue
 			}
 		}
 

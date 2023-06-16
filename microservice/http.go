@@ -26,8 +26,10 @@ func (service *wdtkService) runHTTP() error {
 
 		if len(endpoint.Roles) > 0 {
 			// Requires role authorization
+			log.Printf("Authorization for %s on roles [%v]\n", endpoint.Name, endpoint.Roles)
 			handlers = append(handlers, jwt.AuthorizationMiddleware(endpoint.Roles))
 		} else if endpoint.AuthRequired {
+			log.Printf("Authentication for %s\n", endpoint.Name)
 			handlers = append(handlers, jwt.AuthenticationMiddleware())
 		}
 

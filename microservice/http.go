@@ -1,10 +1,12 @@
 package microservice
 
 import (
+	"errors"
 	"io"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nfwGytautas/gdev/jwt"
 )
 
 // Run HTTP communication service (uses gin)
@@ -12,8 +14,24 @@ func (service *wdtkService) runHTTP() error {
 	r := gin.Default()
 	gs := r.Group("/")
 
+	if len(service.config[CONFIG_API_KEY].(string)) == 0 {
+		return errors.New("api key is empty")
+	}
+
+	jwt.APISecret = service.config[CONFIG_API_KEY].(string)
+
 	for _, endpoint := range service.endpoints {
-		gs.Handle(endpoint.Type, endpoint.Name, service.createEndpointHandler(&endpoint))
+		var handlers []gin.HandlerFunc
+
+		if len(endpoint.Roles) > 0 {
+			// Requires role authorization
+			handlers = append(handlers, jwt.AuthorizationMiddleware(endpoint.Roles))
+		} else if endpoint.AuthRequired {
+			handlers = append(handlers, jwt.AuthenticationMiddleware())
+		}
+
+		handlers = append(handlers, service.createEndpointHandler(&endpoint))
+		gs.Handle(endpoint.Type, endpoint.Name, handlers...)
 	}
 
 	return r.Run(service.config[CONFIG_RUN_ADDRESS].(string))

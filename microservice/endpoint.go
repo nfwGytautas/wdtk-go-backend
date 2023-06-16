@@ -19,6 +19,8 @@ type ServiceEndpoint struct {
 	Name            string
 	EndpointContext interface{}
 	Fn              EndpointFn
+	AuthRequired    bool
+	Roles           []string
 }
 
 /*

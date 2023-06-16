@@ -7,8 +7,9 @@ import (
 )
 
 const (
-	CONFIG_RUN_ADDRESS = "RunAddress"
-	CONFIG_GATEWAY     = "Gateway"
+	CONFIG_RUN_ADDRESS = "runAddress"
+	CONFIG_GATEWAY     = "gateway"
+	CONFIG_API_KEY     = "apiKey"
 )
 
 // Reads ServiceConfig.json from the microservice directory
@@ -32,6 +33,10 @@ func (service *wdtkService) readConfig() (map[string]interface{}, error) {
 
 	if _, exists := config[CONFIG_GATEWAY]; !exists {
 		return nil, errors.New("key  " + CONFIG_GATEWAY + " doesn't exist in the config file")
+	}
+
+	if _, exists := config[CONFIG_API_KEY]; !exists {
+		return nil, errors.New("key  " + CONFIG_API_KEY + " doesn't exist in the config file")
 	}
 
 	return config, nil

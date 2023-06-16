@@ -1,5 +1,7 @@
 package microservice
 
+import "github.com/nfwGytautas/gdev/jwt"
+
 // Endpoint type enum
 const (
 	ENDPOINT_TYPE_GET    = "GET"
@@ -38,6 +40,9 @@ type EndpointExecutor struct {
 
 	// Request parameters
 	Params map[string]string
+
+	// The token info for the requester, nil for endpoints that have authorization disabled
+	RequesterInfo *jwt.TokenInfo
 
 	statusCode int
 	body       interface{}

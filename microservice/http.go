@@ -3,6 +3,7 @@ package microservice
 import (
 	"errors"
 	"io"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -50,6 +51,20 @@ func (service *wdtkService) createEndpointHandler(sp *ServiceEndpoint) gin.Handl
 			EndpointContext: sp.EndpointContext,
 			Body:            body,
 			Params:          map[string]string{},
+			RequesterInfo:   nil,
+		}
+
+		if sp.AuthRequired {
+			tokenInfo, exists := c.Get("TokenInfo")
+			if !exists {
+				// Error
+				log.Println("Failed to get token, aborting")
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get token info"})
+				c.Abort()
+				return
+			} else {
+				executor.RequesterInfo = tokenInfo.(*jwt.TokenInfo)
+			}
 		}
 
 		for _, p := range c.Params {

@@ -26,6 +26,14 @@ type ServiceEndpoint struct {
 }
 
 /*
+ * A struct for endpoint errors
+ */
+type EndpointError struct {
+	Description string `json:"description"`
+	Error       error  `json:"error"`
+}
+
+/*
  * Executor for endpoints
  */
 type EndpointExecutor struct {

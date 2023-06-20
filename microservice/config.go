@@ -8,7 +8,7 @@ import (
 
 const (
 	CONFIG_RUN_ADDRESS = "runAddress"
-	CONFIG_GATEWAY     = "gateway"
+	CONFIG_GATEWAY     = "gatewayIp"
 	CONFIG_API_KEY     = "apiKey"
 )
 

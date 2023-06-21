@@ -35,30 +35,8 @@ func authEndpoint(executor *microservice.EndpointExecutor) {
 
 var eContext EndpointContext
 
-func createAndRunService() {
-	if err := microservice.RegisterService[ServiceData](microservice.ServiceDescription[ServiceData]{}, []microservice.ServiceEndpoint{
-		{
-			Type:            microservice.ENDPOINT_TYPE_GET,
-			Name:            "noAuth/",
-			Fn:              noAuthEndpoint,
-			EndpointContext: &eContext,
-			AuthRequired:    false,
-		},
-		{
-			Type:            microservice.ENDPOINT_TYPE_GET,
-			Name:            "auth/",
-			Fn:              authEndpoint,
-			EndpointContext: &eContext,
-			AuthRequired:    true,
-		},
-	}); err != nil {
-		log.Println(err)
-		panic("Failed to register service")
-	}
-}
-
 func TestNoAuth(t *testing.T) {
-	go createAndRunService()
+	// go createAndRunService()
 
 	time.Sleep(time.Second * 3)
 
@@ -83,7 +61,7 @@ func TestNoAuth(t *testing.T) {
 }
 
 func TestAuth(t *testing.T) {
-	go createAndRunService()
+	// go createAndRunService()
 	time.Sleep(time.Second * 3)
 
 	tokenString, err := jwt.GenerateToken(123, "Role")

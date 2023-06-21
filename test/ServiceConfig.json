@@ -1,5 +1,6 @@
 {
     "runAddress": ":8080",
-    "gateway": "...",
-    "apiKey": "TEST_SECRET"
+    "gatewayIp": "...",
+    "apiKey": "TEST_SECRET",
+    "userValue": "VALUE"
 }

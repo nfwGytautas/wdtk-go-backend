@@ -22,15 +22,35 @@ type MicroserviceConfig struct {
 
 func ReadConfig() (*MicroserviceConfig, error) {
 	result := MicroserviceConfig{}
+	result.UserDefines = make(map[string]interface{})
 
 	configContent, err := os.ReadFile("ServiceConfig.json")
 	if err != nil {
 		return nil, err
 	}
 
-	err = json.Unmarshal(configContent, &result)
+	var entries map[string]*json.RawMessage
+	err = json.Unmarshal(configContent, &entries)
 	if err != nil {
 		return nil, err
+	}
+
+	for key, element := range entries {
+		var object interface{}
+		err = json.Unmarshal(*element, &object)
+		if err != nil {
+			return nil, err
+		}
+
+		if key == CONFIG_RUN_ADDRESS {
+			result.RunAddress = object.(string)
+		} else if key == CONFIG_GATEWAY {
+			result.GatewayIp = object.(string)
+		} else if key == CONFIG_API_KEY {
+			result.ApiKey = object.(string)
+		} else {
+			result.UserDefines[key] = object
+		}
 	}
 
 	return &result, nil

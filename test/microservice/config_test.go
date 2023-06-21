@@ -1,4 +1,4 @@
-package test
+package microservice_test
 
 import (
 	"fmt"

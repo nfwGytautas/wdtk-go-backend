@@ -12,6 +12,30 @@ const (
 	CONFIG_API_KEY     = "apiKey"
 )
 
+// Config struct that is read from the ServiceConfig.json
+type MicroserviceConfig struct {
+	RunAddress  string                 `json:"runAddress"`
+	GatewayIp   string                 `json:"gatewayIp"`
+	ApiKey      string                 `json:"apiKey"`
+	UserDefines map[string]interface{} `json:"-"`
+}
+
+func ReadConfig() (*MicroserviceConfig, error) {
+	result := MicroserviceConfig{}
+
+	configContent, err := os.ReadFile("ServiceConfig.json")
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(configContent, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
 // Reads ServiceConfig.json from the microservice directory
 func (service *wdtkService) readConfig() (map[string]interface{}, error) {
 	configContent, err := os.ReadFile("ServiceConfig.json")

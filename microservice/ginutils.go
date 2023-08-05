@@ -10,7 +10,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/nfwGytautas/gdev/array"
-	"github.com/nfwGytautas/gdev/jwt"
 )
 
 // Utility function for parsing gin request body, return true if parsed, false otherwise
@@ -37,14 +36,14 @@ func GinParseRequestBody(c *gin.Context, out any) bool {
 }
 
 // Get token info from gin context
-func GetTokenInfo(c *gin.Context) (jwt.TokenInfo, error) {
+func GetTokenInfo(c *gin.Context) (TokenInfo, error) {
 	tokenInfo, exists := c.Get("TokenInfo")
 	if !exists {
 		// Error
-		return jwt.TokenInfo{}, errors.New("token info not set, make sure authentication middleware is used")
+		return TokenInfo{}, errors.New("token info not set, make sure authentication middleware is used")
 	}
 
-	return tokenInfo.(jwt.TokenInfo), nil
+	return tokenInfo.(TokenInfo), nil
 }
 
 /*

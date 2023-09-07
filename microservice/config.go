@@ -23,7 +23,7 @@ func ReadConfig() (*MicroserviceConfig, error) {
 	result := MicroserviceConfig{}
 	result.UserDefines = make(map[string]interface{})
 
-	configContent, err := os.ReadFile("ServiceConfig.json")
+	configContent, err := os.ReadFile("WdtkConfig.json")
 	if err != nil {
 		return nil, err
 	}
